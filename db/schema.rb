@@ -28,20 +28,23 @@ ActiveRecord::Schema.define(version: 2020_04_02_134030) do
     t.integer "amount"
     t.string "name"
     t.integer "user_id"
+    t.datetime "target_datetime"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
+    t.string "name", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "token", default: "820ca124f6fef5f7ad0cd949ab5de40d171ea66d9f06938ac874e9aa9789", null: false
+    t.string "token", default: "a5d9295eddf0224f28a573cf0f8500c2bdd0ca575cd2b61a8a668ab377fd", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["name"], name: "index_users_on_name", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

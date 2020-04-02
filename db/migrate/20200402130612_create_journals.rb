@@ -4,7 +4,7 @@ class CreateJournals < ActiveRecord::Migration[6.0]
       t.integer :amount
       t.string :name
       t.integer :user_id
-
+      t.datetime :target_datetime
       t.timestamps
     end
   end

@@ -2,17 +2,13 @@ name: CI
 on:
   push:
     branches: [ dev ]
-  pull_request:
-    branches: [ master ]
 jobs:
   unit-test:
     container:
-      image: ruby:2.6.5
+      image: ruby:2.6.3
     runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout
+    steps:
       - uses: actions/checkout@v2
-      - name: Run Test
       - name: Setup YARN and NodeJS
         run: |
           curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -21,7 +17,6 @@ jobs:
           apt-get install -y yarn nodejs
       - name: Build and setup
         run: |
-          rm -f config/database.yml
           gem install bundler --no-document -v $(grep "BUNDLED WITH" -1 Gemfile.lock | tail -n 1)
           bundle config set deployment 'true'
           bundle install --jobs 4 --retry 3
@@ -29,9 +24,25 @@ jobs:
       - name: Exec tests
         run: bundle exec rake
       - name: Push master
+        env:
+          GITHUB_PASS: ${{ secrets.PASS }}
         run: |
           git config --local user.email "wevorence@gmail.com"
-          git config --local user.name "github"
-          git checkout master
-          git merge $GITHUB_REF
+          git config --local user.name "wasuken"
+          git branch
+          git remote remove origin
+          git remote add origin https://wasuken:${GITHUB_PASS}@github.com/${GITHUB_REPOSITORY}
+<<<<<<< HEAD
+          git branch
+          git pull origin master --allow-unrelated-histories
+          git pull origin dev --allow-unrelated-histories
+          git checkout -b master
+          git branch
+=======
+          git branch
+          git pull origin master
+          git pull origin dev
+          git checkout -b master
+>>>>>>> d844ba0... update.
+          git merge --allow-unrelated-histories origin/dev
           git push origin master

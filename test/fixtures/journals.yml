@@ -1,11 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  amount: 1
-  name: MyString
+  id: 1
+  amount: 1000
+  name: 酒代
   user_id: 1
 
 two:
-  amount: 1
-  name: MyString
+  id: 2
+  amount: 2000
+  name: 買い物
+  user_id: 1
+
+three:
+  id: 3
+  amount: 3000
+  name: 給料
+  user_id: 1
+
+four:
+  id: 4
+  amount: 4000
+  name: ボーナス
   user_id: 1
