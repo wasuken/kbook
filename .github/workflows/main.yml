@@ -1,0 +1,37 @@
+name: CI
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  unit-test:
+    container:
+      image: ruby:2.6.5
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+      - uses: actions/checkout@v2
+      - name: Run Test
+      - name: Setup YARN and NodeJS
+        run: |
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          curl -sL https://deb.nodesource.com/setup_13.x | bash -
+          apt-get install -y yarn nodejs
+      - name: Build and setup
+        run: |
+          rm -f config/database.yml
+          gem install bundler --no-document -v $(grep "BUNDLED WITH" -1 Gemfile.lock | tail -n 1)
+          bundle config set deployment 'true'
+          bundle install --jobs 4 --retry 3
+          bundle exec rails yarn:install db:setup assets:precompile
+      - name: Exec tests
+        run: bundle exec rake
+      - name: Push master
+        run: |
+          git config --local user.email "wevorence@gmail.com"
+          git config --local user.name "github"
+          git checkout master
+          git merge $GITHUB_REF
+          git push origin master
