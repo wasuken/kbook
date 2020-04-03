@@ -40,9 +40,13 @@ jobs:
           git branch
 =======
           git branch
-          git pull origin master
-          git pull origin dev
+          git pull origin master --allow-unrelated-histories
+          git pull origin dev --allow-unrelated-histories
           git checkout -b master
+<<<<<<< HEAD
 >>>>>>> d844ba0... update.
+=======
+          git branch
+>>>>>>> 89cb587... one.
           git merge --allow-unrelated-histories origin/dev
           git push origin master
